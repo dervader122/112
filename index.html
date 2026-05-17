@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Radio Operativ FULL HTML</title>
+<style>
+:root{
+    --bg:#090c11;
+    --panel:#151b24;
+    --panel2:#1d2633;
+    --panel3:#0f141c;
+    --line:#333d4d;
+    --text:#e9edf5;
+    --muted:#9faabc;
+    --green:#76ffb4;
+    --red:#ff6262;
+    --yellow:#ffd56b;
+    --blue:#7db1ff;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left, rgba(125,177,255,.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(118,255,180,.10), transparent 25%),
+        linear-gradient(135deg,#07090d,#151b24 55%,#080b10);
+    color:var(--text);
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+button,input,select,textarea{font-family:inherit}
+.hidden{display:none!important}
+.topbar{
+    height:78px;
+    background:rgba(13,17,24,.96);
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{
+    width:52px;height:52px;
+    border-radius:15px;
+    background:#080b10;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    font-size:28px;
+}
+.brand h1{margin:0;font-size:20px;letter-spacing:1px}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.nav button,.btn{
+    border:1px solid #586579;
+    background:#2e394d;
+    color:white;
+    border-radius:11px;
+    padding:10px 13px;
+    cursor:pointer;
+    font-weight:850;
+}
+.nav button:hover,.btn:hover{background:#40506b}
+main{padding:22px}
+.card{
+    background:linear-gradient(180deg,var(--panel),#111720);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 28px 70px rgba(0,0,0,.35);
+}
+.auth{
+    max-width:530px;
+    margin:40px auto;
+    padding:28px;
+}
+h2,h3{margin-top:0}
+.muted{color:var(--muted)}
+label{
+    display:block;
+    margin:14px 0 7px;
+    font-weight:800;
+}
+input,select,textarea{
+    width:100%;
+    background:#0a0f16;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:12px;
+    padding:13px;
+    outline:none;
+}
+textarea{min-height:86px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#7b879b}
+.primary{
+    width:100%;
+    margin-top:16px;
+    border:1px solid #64718a;
+    background:#35445f;
+    color:white;
+    border-radius:12px;
+    padding:13px;
+    cursor:pointer;
+    font-weight:900;
+}
+.primary:hover{background:#465977}
+.flash{
+    position:fixed;
+    top:92px;right:20px;
+    background:#2e394d;
+    border:1px solid #69768d;
+    border-radius:14px;
+    padding:13px 16px;
+    z-index:999;
+    max-width:390px;
+}
+.radio-layout{
+    display:grid;
+    grid-template-columns:305px 1fr 320px;
+    gap:18px;
+    min-height:calc(100vh - 126px);
+}
+.side,.radio-main,.right{
+    padding:18px;
+    overflow:auto;
+}
+.section-title{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    margin:3px 0 13px;
+}
+.channel{
+    width:100%;
+    border:1px solid var(--line);
+    background:#111821;
+    color:var(--text);
+    border-radius:13px;
+    padding:12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:850;
+    text-align:left;
+}
+.channel:hover{background:#263143}
+.channel.active{background:#344157;border-color:#7d899f}
+.dot{
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
+}
+.operator,.mini{
+    margin-top:15px;
+    background:#0f151e;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+}
+.badge{
+    display:inline-block;
+    margin-top:8px;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#2c3545;
+    border:1px solid #5e6b80;
+    font-size:12px;
+    font-weight:900;
+}
+.radio-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    padding-bottom:15px;
+    gap:12px;
+}
+.radio-head h2{margin:0}
+.radio-head p{margin:5px 0 0;color:var(--muted)}
+.signal{
+    display:flex;
+    align-items:end;
+    gap:5px;
+    color:var(--green);
+    font-size:12px;
+    font-weight:900;
+}
+.signal i{
+    display:block;width:6px;border-radius:5px;background:var(--green);
+}
+.signal i:nth-child(1){height:10px}
+.signal i:nth-child(2){height:16px}
+.signal i:nth-child(3){height:23px}
+.signal i:nth-child(4){height:30px}
+.messages{
+    height:calc(100vh - 330px);
+    min-height:380px;
+    overflow:auto;
+    padding:16px 4px;
+}
+.msg{
+    background:#101722;
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:12px;
+    margin-bottom:10px;
+}
+.msg.code{border-color:#786b3d;background:#211d12}
+.msg.audio{border-color:#315c7c;background:#111c28}
+.msg.system{border-color:#31644d;background:#102119;color:#b9ffd6}
+.msg-top{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    color:var(--muted);
+    font-size:13px;
+}
+.msg-top b{color:var(--text);font-size:14px}
+.msg-top em{margin-left:auto;font-style:normal}
+.msg-body{margin-top:7px;line-height:1.48}
+audio{width:100%;margin-top:8px}
+.composer{
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    display:grid;
+    grid-template-columns:165px 1fr 135px;
+    gap:10px;
+}
+.ptt{background:#3b4659}
+.ptt.live{
+    background:#7d2020;
+    border-color:#ff7474;
+    box-shadow:0 0 24px rgba(255,101,101,.35);
+}
+.send{background:#3d4b65}
+.quick button{
+    width:100%;
+    text-align:left;
+    margin:4px 0;
+    padding:9px;
+    background:#141b25;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    cursor:pointer;
+}
+.quick button:hover{background:#283244}
+.panel{
+    max-width:1180px;
+    margin:0 auto;
+    padding:24px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:18px 0;
+}
+.stat{
+    background:#0f151e;
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:15px;
+}
+.stat b{font-size:27px;display:block}
+.stat span{color:var(--muted);font-size:12px}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:16px;
+}
+th,td{
+    border-bottom:1px solid var(--line);
+    padding:10px;
+    text-align:left;
+    font-size:13px;
+}
+th{background:#101722;color:#f1f4fa}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.smallbtn{
+    padding:8px 10px;
+    font-size:12px;
+    border-radius:9px;
+}
+.danger{background:#5b2528;border-color:#954f55}
+.warn{background:#56461f;border-color:#8c7532}
+.ok{background:#1f5638;border-color:#438b62}
+.history-item{
+    background:#101722;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:13px;
+    margin:9px 0;
+}
+.history-item .top{color:var(--muted);font-size:13px}
+.history-item b{color:var(--text)}
+.history-item em{float:right;font-style:normal}
+.search-row{
+    display:grid;
+    grid-template-columns:1fr 220px 140px;
+    gap:10px;
+    margin:16px 0;
+}
+.row2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+.footer-note{color:var(--muted);font-size:12px;margin-top:10px}
+.userline{font-size:13px;color:var(--muted)}
+.mic-meter{
+    height:10px;
+    background:#0a0f16;
+    border:1px solid var(--line);
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:10px;
+}
+.mic-meter div{
+    height:100%;
+    width:0%;
+    background:var(--green);
+}
+.online-user{
+    padding:8px;
+    border:1px solid var(--line);
+    background:#111821;
+    border-radius:10px;
+    margin-bottom:6px;
+    font-size:13px;
+}
+@media(max-width:1150px){
+    .radio-layout{grid-template-columns:1fr}
+    .messages{height:430px}
+    .grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+    .topbar{height:auto;flex-direction:column;align-items:flex-start;padding:14px;gap:12px}
+    main{padding:14px}
+    .composer,.search-row,.row2{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">📻</div>
+        <div>
+            <h1>SISTEM RADIO OPERATIV</h1>
+            <p>FULL HTML • conturi • mesaje între taburi • microfon selectabil • PTT</p>
+        </div>
+    </div>
+    <nav class="nav">
+        <button class="authOnly" onclick="showPage('radio')">Radio</button>
+        <button class="authOnly" onclick="showPage('history')">Istoric</button>
+        <button class="adminOnly" onclick="showPage('admin')">Admin</button>
+        <button class="guestOnly" onclick="showPage('login')">Login</button>
+        <button class="guestOnly" onclick="showPage('register')">Cont nou</button>
+        <button class="authOnly" onclick="logout()">Ieșire</button>
+    </nav>
+</header>
+
+<div id="flash" class="flash hidden"></div>
+
+<main>
+
+<section id="loginPage" class="auth card">
+    <h2>Autentificare</h2>
+    <p class="muted">Intră în sistem cu username și parolă.</p>
+    <label>Username</label>
+    <input id="loginUser" placeholder="admin">
+    <label>Parolă</label>
+    <input id="loginPass" type="password" placeholder="admin123">
+    <button class="primary" onclick="login()">INTRĂ ÎN SISTEM</button>
+    <p class="footer-note">Conturi demo: <b>admin/admin123</b>, <b>smurd/smurd123</b>, <b>pompieri/pompieri123</b>, <b>politie/politie123</b></p>
+</section>
+
+<section id="registerPage" class="auth card hidden">
+    <h2>Creare cont radio</h2>
+    <p class="muted">Contul se salvează local în browser.</p>
+    <label>Username</label>
+    <input id="regUser" placeholder="ex: vlad">
+    <label>Parolă</label>
+    <input id="regPass" type="password" placeholder="minim 4 caractere">
+    <label>Indicativ radio</label>
+    <input id="regCallsign" placeholder="ex: SMURD-21">
+    <label>Unitate</label>
+    <input id="regUnit" placeholder="ex: SMURD Vaslui">
+    <button class="primary" onclick="registerUser()">CREEAZĂ CONT</button>
+</section>
+
+<section id="radioPage" class="hidden">
+    <div class="radio-layout">
+        <aside class="side card">
+            <h3 class="section-title">Canale radio</h3>
+            <div id="channelList"></div>
+            <div class="operator">
+                <h3>Operator conectat</h3>
+                <p><b id="opCallsign">---</b></p>
+                <p class="userline" id="opUnit">---</p>
+                <span class="badge" id="opRole">---</span>
+            </div>
+            <div class="mini">
+                <h3>Utilizatori online</h3>
+                <div id="onlineUsers"></div>
+                <p class="footer-note">Online-ul funcționează între taburi/ferestre locale.</p>
+            </div>
+        </aside>
+
+        <section class="radio-main card">
+            <div class="radio-head">
+                <div>
+                    <h2 id="currentChannelTitle">DISPECERAT GENERAL</h2>
+                    <p>Canal operațional activ • transmisie locală prin browser</p>
+                </div>
+                <div class="signal">
+                    <i></i><i></i><i></i><i></i> SEMNAL ACTIV
+                </div>
+            </div>
+
+            <div id="messages" class="messages"></div>
+
+            <div class="composer">
+                <button id="pttBtn" class="btn ptt">ȚINE APĂSAT PTT</button>
+                <input id="messageInput" placeholder="Scrie mesaj radio...">
+                <button class="btn send" onclick="sendMessage()">TRANSMITE</button>
+            </div>
+            <p class="footer-note">ENTER = mesaj text • PTT = înregistrare audio de la microfonul selectat • mesajele apar și în celelalte taburi.</p>
+        </section>
+
+        <aside class="right card">
+            <h3 class="section-title">Microfon</h3>
+            <select id="micSelect"></select>
+            <button class="btn smallbtn" style="width:100%;margin-top:8px" onclick="initMicrophones()">Caută microfoane</button>
+            <div class="mic-meter"><div id="micLevel"></div></div>
+            <p class="footer-note">Browserul cere permisiune pentru microfon. Deschide fișierul în Chrome/Edge.</p>
+
+            <div class="mini">
+                <h3>Coduri rapide</h3>
+                <div class="quick">
+                    <button onclick="quickCode('Cod 0 - Test radio / recepție')">Cod 0 - Test radio</button>
+                    <button onclick="quickCode('Cod 1 - Disponibil')">Cod 1 - Disponibil</button>
+                    <button onclick="quickCode('Cod 2 - În deplasare')">Cod 2 - În deplasare</button>
+                    <button onclick="quickCode('Cod 3 - Ajuns la fața locului')">Cod 3 - Ajuns la caz</button>
+                    <button onclick="quickCode('Cod 4 - Intervenție finalizată')">Cod 4 - Finalizat</button>
+                    <button onclick="quickCode('Cod 5 - Solicit sprijin')">Cod 5 - Sprijin</button>
+                    <button onclick="quickCode('Cod ROȘU - Urgență majoră')">Cod ROȘU</button>
+                </div>
+            </div>
+
+            <div class="mini">
+                <h3>Date sistem</h3>
+                <button class="btn smallbtn warn" onclick="exportData()">Export JSON</button>
+                <button class="btn smallbtn danger" onclick="resetDemo()">Reset</button>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section id="historyPage" class="panel card hidden">
+    <h2>Istoric comunicații</h2>
+    <p class="muted">Caută în mesajele salvate local.</p>
+    <div class="search-row">
+        <input id="historySearch" placeholder="Caută după mesaj, indicativ, canal...">
+        <select id="historyChannel"></select>
+        <button class="btn" onclick="renderHistory()">Caută</button>
+    </div>
+    <div id="historyList"></div>
+</section>
+
+<section id="adminPage" class="panel card hidden">
+    <h2>Panou administrator</h2>
+    <p class="muted">Gestionează conturile locale din sistem.</p>
+    <div class="grid">
+        <div class="stat"><b id="statUsers">0</b><span>conturi totale</span></div>
+        <div class="stat"><b id="statActive">0</b><span>conturi active</span></div>
+        <div class="stat"><b id="statAdmins">0</b><span>administratori</span></div>
+        <div class="stat"><b id="statMessages">0</b><span>mesaje</span></div>
+    </div>
+
+    <h3>Adaugă cont manual</h3>
+    <div class="row2">
+        <input id="adminNewUser" placeholder="username">
+        <input id="adminNewPass" placeholder="parolă">
+        <input id="adminNewCallsign" placeholder="indicativ">
+        <input id="adminNewUnit" placeholder="unitate">
+    </div>
+    <div class="row2" style="margin-top:10px">
+        <select id="adminNewRole">
+            <option value="operator">operator</option>
+            <option value="admin">admin</option>
+            <option value="dispatcher">dispatcher</option>
+        </select>
+        <button class="btn ok" onclick="adminCreateUser()">Adaugă cont</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Username</th><th>Indicativ</th><th>Unitate</th><th>Rol</th><th>Activ</th><th>Creat la</th><th>Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody id="usersTable"></tbody>
+    </table>
+</section>
+
+</main>
+
+<script>
+const CHANNELS = ["DISPECERAT GENERAL","SMURD","POMPIERI","POLIȚIE","AMBULANȚĂ","INTERVENȚII SPECIALE","LOGISTICĂ","TEST RADIO"];
+const tabId = "tab_" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const bus = ("BroadcastChannel" in window) ? new BroadcastChannel("radio_operativ_bus") : null;
+
+let currentUser = null;
+let currentChannel = "DISPECERAT GENERAL";
+let pttActive = false;
+let currentStream = null;
+let mediaRecorder = null;
+let audioChunks = [];
+let audioContext = null;
+let analyser = null;
+let meterTimer = null;
+let online = {};
+
+function now(){
+    return new Date().toLocaleString("ro-RO");
+}
+function uid(){
+    return Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+}
+function load(key,fallback){
+    try{return JSON.parse(localStorage.getItem(key)) ?? fallback;}catch(e){return fallback;}
+}
+function save(key,value){
+    localStorage.setItem(key,JSON.stringify(value));
+}
+function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function flash(text){
+    const f=document.getElementById("flash");
+    f.innerText=text;
+    f.classList.remove("hidden");
+    setTimeout(()=>f.classList.add("hidden"),2600);
+}
+function broadcast(type,data={}){
+    const payload={type,data,tabId,time:Date.now()};
+    if(bus) bus.postMessage(payload);
+    localStorage.setItem("radio_last_event", JSON.stringify(payload));
+}
+window.addEventListener("storage", e=>{
+    if(e.key==="radio_messages") renderMessages();
+    if(e.key==="radio_users" && currentUser) syncCurrentUser();
+    if(e.key==="radio_last_event" && e.newValue){
+        try{handleBus(JSON.parse(e.newValue));}catch(err){}
+    }
+});
+if(bus){
+    bus.onmessage = e => handleBus(e.data);
+}
+function handleBus(payload){
+    if(!payload || payload.tabId===tabId) return;
+    if(payload.type==="message" || payload.type==="audio" || payload.type==="system"){
+        renderMessages();
+    }
+    if(payload.type==="online_ping"){
+        online[payload.tabId]=payload.data;
+        renderOnline();
+    }
+    if(payload.type==="online_request"){
+        sendOnlinePing();
+    }
+    if(payload.type==="logout"){
+        delete online[payload.tabId];
+        renderOnline();
+    }
+}
+function initData(){
+    if(!load("radio_users",null)){
+        save("radio_users",[
+            {id:uid(),username:"admin",password:"admin123",callsign:"DISPECERAT-01",unit:"Centru Operativ",role:"admin",active:true,createdAt:now()},
+            {id:uid(),username:"smurd",password:"smurd123",callsign:"SMURD-21",unit:"SMURD",role:"operator",active:true,createdAt:now()},
+            {id:uid(),username:"pompieri",password:"pompieri123",callsign:"POMPIERI-11",unit:"Detașament Pompieri",role:"operator",active:true,createdAt:now()},
+            {id:uid(),username:"politie",password:"politie123",callsign:"POLIȚIE-05",unit:"Poliție",role:"dispatcher",active:true,createdAt:now()}
+        ]);
+    }
+    if(!load("radio_messages",null)){
+        save("radio_messages",[
+            {id:uid(),channel:"DISPECERAT GENERAL",callsign:"DISPECERAT-01",unit:"Centru Operativ",role:"admin",type:"system",text:"Sistem radio pornit. Pentru test cu mai mulți utilizatori, deschide index.html în două taburi și intră cu conturi diferite.",createdAt:now()}
+        ]);
+    }
+}
+function refreshNav(){
+    document.querySelectorAll(".authOnly").forEach(x=>x.classList.toggle("hidden",!currentUser));
+    document.querySelectorAll(".guestOnly").forEach(x=>x.classList.toggle("hidden",!!currentUser));
+    document.querySelectorAll(".adminOnly").forEach(x=>x.classList.toggle("hidden",!(currentUser && currentUser.role==="admin")));
+}
+function showPage(page){
+    ["loginPage","registerPage","radioPage","historyPage","adminPage"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    if(page==="login") document.getElementById("loginPage").classList.remove("hidden");
+    if(page==="register") document.getElementById("registerPage").classList.remove("hidden");
+    if(page==="radio"){
+        if(!currentUser){showPage("login");return;}
+        document.getElementById("radioPage").classList.remove("hidden");
+        renderChannels();renderOperator();renderMessages();renderOnline();
+    }
+    if(page==="history"){
+        if(!currentUser){showPage("login");return;}
+        document.getElementById("historyPage").classList.remove("hidden");
+        renderHistoryControls();renderHistory();
+    }
+    if(page==="admin"){
+        if(!currentUser){showPage("login");return;}
+        if(currentUser.role!=="admin"){flash("Acces doar pentru administrator.");showPage("radio");return;}
+        document.getElementById("adminPage").classList.remove("hidden");
+        renderAdmin();
+    }
+    refreshNav();
+}
+function login(){
+    const username=document.getElementById("loginUser").value.trim();
+    const password=document.getElementById("loginPass").value.trim();
+    const users=load("radio_users",[]);
+    const u=users.find(x=>x.username.toLowerCase()===username.toLowerCase() && x.password===password);
+    if(!u){flash("Username sau parolă greșită.");return;}
+    if(!u.active){flash("Cont dezactivat.");return;}
+    currentUser=u;
+    sessionStorage.setItem("radio_current_user",u.id);
+    addSystemMessage(u.callsign+" s-a conectat în sistem.");
+    sendOnlinePing();
+    broadcast("online_request",{});
+    flash("Autentificat: "+u.callsign);
+    showPage("radio");
+}
+function logout(){
+    if(currentUser) addSystemMessage(currentUser.callsign+" a ieșit din sistem.");
+    broadcast("logout",{});
+    currentUser=null;
+    sessionStorage.removeItem("radio_current_user");
+    stopMicrophone();
+    showPage("login");
+}
+function syncCurrentUser(){
+    if(!currentUser)return;
+    const users=load("radio_users",[]);
+    const u=users.find(x=>x.id===currentUser.id);
+    if(!u || !u.active){logout();flash("Contul a fost dezactivat.");return;}
+    currentUser=u;
+    renderOperator();
+}
+function registerUser(){
+    const username=document.getElementById("regUser").value.trim();
+    const password=document.getElementById("regPass").value.trim();
+    const callsign=document.getElementById("regCallsign").value.trim().toUpperCase();
+    const unit=document.getElementById("regUnit").value.trim();
+    if(username.length<3 || password.length<4 || callsign.length<2){flash("Date incomplete.");return;}
+    const users=load("radio_users",[]);
+    if(users.some(x=>x.username.toLowerCase()===username.toLowerCase())){flash("Username deja existent.");return;}
+    users.push({id:uid(),username,password,callsign,unit:unit||"Nespecificat",role:"operator",active:true,createdAt:now()});
+    save("radio_users",users);
+    flash("Cont creat.");
+    showPage("login");
+}
+function renderChannels(){
+    const list=document.getElementById("channelList");
+    list.innerHTML="";
+    CHANNELS.forEach(ch=>{
+        const b=document.createElement("button");
+        b.className="channel"+(ch===currentChannel?" active":"");
+        b.innerHTML=`<span class="dot"></span>${escapeHtml(ch)}`;
+        b.onclick=()=>{currentChannel=ch;document.getElementById("currentChannelTitle").innerText=ch;renderChannels();renderMessages();};
+        list.appendChild(b);
+    });
+    document.getElementById("currentChannelTitle").innerText=currentChannel;
+}
+function renderOperator(){
+    if(!currentUser)return;
+    document.getElementById("opCallsign").innerText=currentUser.callsign;
+    document.getElementById("opUnit").innerText=currentUser.unit;
+    document.getElementById("opRole").innerText=currentUser.role.toUpperCase();
+}
+function sendOnlinePing(){
+    if(!currentUser)return;
+    const data={callsign:currentUser.callsign,unit:currentUser.unit,role:currentUser.role,channel:currentChannel,lastSeen:Date.now()};
+    online[tabId]=data;
+    broadcast("online_ping",data);
+    renderOnline();
+}
+setInterval(sendOnlinePing,3500);
+function renderOnline(){
+    const box=document.getElementById("onlineUsers");
+    if(!box)return;
+    const nowMs=Date.now();
+    Object.keys(online).forEach(k=>{if(nowMs-online[k].lastSeen>10000) delete online[k];});
+    const arr=Object.values(online);
+    if(arr.length===0){box.innerHTML='<p class="muted">Nimeni online.</p>';return;}
+    box.innerHTML=arr.map(u=>`<div class="online-user"><b>${escapeHtml(u.callsign)}</b><br><span class="muted">${escapeHtml(u.unit)} • ${escapeHtml(u.channel)}</span></div>`).join("");
+}
+function getMessages(){return load("radio_messages",[]);}
+function saveMessages(m){save("radio_messages",m);}
+function addMessageObj(obj){
+    const messages=getMessages();
+    messages.push(obj);
+    saveMessages(messages);
+    broadcast(obj.type==="audio"?"audio":obj.type==="system"?"system":"message",obj);
+    renderMessages();
+}
+function addSystemMessage(text){
+    addMessageObj({id:uid(),channel:currentChannel,callsign:"SISTEM",unit:"Radio Operativ",role:"system",type:"system",text,createdAt:now()});
+}
+function renderMessages(){
+    const box=document.getElementById("messages");
+    if(!box)return;
+    const messages=getMessages().filter(m=>m.channel===currentChannel);
+    box.innerHTML="";
+    if(messages.length===0){box.innerHTML='<p class="muted">Nu există mesaje pe acest canal.</p>';return;}
+    messages.forEach(m=>{
+        const div=document.createElement("div");
+        div.className="msg "+(m.type||"text");
+        let body="";
+        if(m.type==="audio"){
+            body=`🎤 Transmisie audio:<audio controls src="${m.audioData}"></audio>${m.text?'<div class="footer-note">'+escapeHtml(m.text)+'</div>':''}`;
+        }else{
+            body=escapeHtml(m.text);
+        }
+        div.innerHTML=`<div class="msg-top"><b>${escapeHtml(m.callsign)}</b><span>${escapeHtml(m.unit||"")}</span><em>${escapeHtml(m.createdAt)}</em></div><div class="msg-body">${body}</div>`;
+        box.appendChild(div);
+    });
+    box.scrollTop=box.scrollHeight;
+}
+function sendMessage(type="text",customText=null){
+    if(!currentUser)return;
+    const input=document.getElementById("messageInput");
+    const text=(customText ?? input.value).trim();
+    if(!text)return;
+    addMessageObj({id:uid(),channel:currentChannel,callsign:currentUser.callsign,unit:currentUser.unit,role:currentUser.role,type,text:(pttActive?"[PTT ACTIV] ":"")+text,createdAt:now()});
+    input.value="";
+}
+function quickCode(text){sendMessage("code",text);}
+async function initMicrophones(){
+    try{
+        await navigator.mediaDevices.getUserMedia({audio:true});
+        const devices=await navigator.mediaDevices.enumerateDevices();
+        const sel=document.getElementById("micSelect");
+        sel.innerHTML="";
+        const mics=devices.filter(d=>d.kind==="audioinput");
+        mics.forEach((d,i)=>{
+            const opt=document.createElement("option");
+            opt.value=d.deviceId;
+            opt.textContent=d.label || ("Microfon "+(i+1));
+            sel.appendChild(opt);
+        });
+        if(mics.length===0) flash("Nu am găsit microfoane.");
+        else{
+            await loadSelectedMicrophone();
+            flash("Microfon pregătit.");
+        }
+    }catch(e){
+        flash("Nu s-a permis accesul la microfon.");
+    }
+}
+async function loadSelectedMicrophone(){
+    stopMicrophone();
+    const id=document.getElementById("micSelect").value;
+    currentStream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:id?{exact:id}:undefined}});
+    mediaRecorder=new MediaRecorder(currentStream);
+    mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+    mediaRecorder.onstop=()=>{
+        const blob=new Blob(audioChunks,{type:"audio/webm"});
+        audioChunks=[];
+        const reader=new FileReader();
+        reader.onloadend=()=>{
+            addMessageObj({id:uid(),channel:currentChannel,callsign:currentUser.callsign,unit:currentUser.unit,role:currentUser.role,type:"audio",text:"Înregistrare PTT",audioData:reader.result,createdAt:now()});
+        };
+        reader.readAsDataURL(blob);
+    };
+    startMeter(currentStream);
+}
+document.getElementById("micSelect").addEventListener("change",()=>loadSelectedMicrophone().catch(()=>flash("Eroare la schimbarea microfonului.")));
+function stopMicrophone(){
+    if(currentStream){currentStream.getTracks().forEach(t=>t.stop());currentStream=null;}
+    if(meterTimer) clearInterval(meterTimer);
+    document.getElementById("micLevel").style.width="0%";
+}
+function startMeter(stream){
+    try{
+        audioContext=new (window.AudioContext||window.webkitAudioContext)();
+        const source=audioContext.createMediaStreamSource(stream);
+        analyser=audioContext.createAnalyser();
+        analyser.fftSize=256;
+        source.connect(analyser);
+        const data=new Uint8Array(analyser.frequencyBinCount);
+        meterTimer=setInterval(()=>{
+            analyser.getByteFrequencyData(data);
+            const avg=data.reduce((a,b)=>a+b,0)/data.length;
+            document.getElementById("micLevel").style.width=Math.min(100,avg*1.4)+"%";
+        },100);
+    }catch(e){}
+}
+const ptt=document.getElementById("pttBtn");
+ptt.addEventListener("mousedown",()=>{
+    if(!mediaRecorder){flash("Selectează/activează microfonul mai întâi.");return;}
+    if(mediaRecorder.state==="inactive"){
+        audioChunks=[];
+        mediaRecorder.start();
+        pttActive=true;
+        ptt.classList.add("live");
+        ptt.innerText="TRANSMIȚI AUDIO...";
+    }
+});
+function stopPTT(){
+    if(mediaRecorder && mediaRecorder.state!=="inactive"){
+        mediaRecorder.stop();
+    }
+    pttActive=false;
+    ptt.classList.remove("live");
+    ptt.innerText="ȚINE APĂSAT PTT";
+}
+ptt.addEventListener("mouseup",stopPTT);
+ptt.addEventListener("mouseleave",stopPTT);
+ptt.addEventListener("touchstart",e=>{e.preventDefault();ptt.dispatchEvent(new Event("mousedown"));});
+ptt.addEventListener("touchend",e=>{e.preventDefault();stopPTT();});
+function renderHistoryControls(){
+    const sel=document.getElementById("historyChannel");
+    sel.innerHTML='<option value="TOATE">TOATE CANALELE</option>';
+    CHANNELS.forEach(ch=>sel.innerHTML+=`<option value="${escapeHtml(ch)}">${escapeHtml(ch)}</option>`);
+}
+function renderHistory(){
+    const q=document.getElementById("historySearch").value.trim().toLowerCase();
+    const ch=document.getElementById("historyChannel").value;
+    let messages=getMessages().slice().reverse();
+    if(ch && ch!=="TOATE") messages=messages.filter(m=>m.channel===ch);
+    if(q) messages=messages.filter(m=>m.text.toLowerCase().includes(q)||m.callsign.toLowerCase().includes(q)||m.channel.toLowerCase().includes(q)||(m.unit||"").toLowerCase().includes(q));
+    const list=document.getElementById("historyList");
+    list.innerHTML="";
+    if(messages.length===0){list.innerHTML='<p class="muted">Nu există rezultate.</p>';return;}
+    messages.forEach(m=>{
+        const div=document.createElement("div");
+        div.className="history-item";
+        div.innerHTML=`<div class="top"><b>${escapeHtml(m.callsign)}</b> • ${escapeHtml(m.channel)} • ${escapeHtml(m.unit||"")}<em>${escapeHtml(m.createdAt)}</em></div><p>${m.type==="audio"?"🎤 Audio PTT":escapeHtml(m.text)}</p>`;
+        list.appendChild(div);
+    });
+}
+function renderAdmin(){
+    const users=load("radio_users",[]);
+    const messages=getMessages();
+    document.getElementById("statUsers").innerText=users.length;
+    document.getElementById("statActive").innerText=users.filter(u=>u.active).length;
+    document.getElementById("statAdmins").innerText=users.filter(u=>u.role==="admin").length;
+    document.getElementById("statMessages").innerText=messages.length;
+    const tbody=document.getElementById("usersTable");
+    tbody.innerHTML="";
+    users.forEach(u=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`<td>${escapeHtml(u.id.slice(0,8))}</td><td><b>${escapeHtml(u.username)}</b></td><td>${escapeHtml(u.callsign)}</td><td>${escapeHtml(u.unit)}</td><td>${escapeHtml(u.role)}</td><td>${u.active?"DA":"NU"}</td><td>${escapeHtml(u.createdAt)}</td><td><div class="actions"><button class="btn smallbtn ${u.active?"danger":"ok"}" onclick="toggleUser('${u.id}')">${u.active?"Dezactivează":"Activează"}</button><button class="btn smallbtn warn" onclick="toggleRole('${u.id}')">Rol</button><button class="btn smallbtn danger" onclick="deleteUser('${u.id}')">Șterge</button></div></td>`;
+        tbody.appendChild(tr);
+    });
+}
+function adminCreateUser(){
+    const username=document.getElementById("adminNewUser").value.trim();
+    const password=document.getElementById("adminNewPass").value.trim();
+    const callsign=document.getElementById("adminNewCallsign").value.trim().toUpperCase();
+    const unit=document.getElementById("adminNewUnit").value.trim();
+    const role=document.getElementById("adminNewRole").value;
+    if(username.length<3||password.length<4||callsign.length<2){flash("Completează datele contului.");return;}
+    const users=load("radio_users",[]);
+    if(users.some(u=>u.username.toLowerCase()===username.toLowerCase())){flash("Username existent.");return;}
+    users.push({id:uid(),username,password,callsign,unit:unit||"Nespecificat",role,active:true,createdAt:now()});
+    save("radio_users",users);
+    ["adminNewUser","adminNewPass","adminNewCallsign","adminNewUnit"].forEach(id=>document.getElementById(id).value="");
+    renderAdmin();
+}
+function toggleUser(id){
+    const users=load("radio_users",[]);
+    const u=users.find(x=>x.id===id);
+    if(!u)return;
+    if(currentUser && currentUser.id===id){flash("Nu îți poți dezactiva propriul cont.");return;}
+    u.active=!u.active;
+    save("radio_users",users);
+    renderAdmin();
+}
+function toggleRole(id){
+    const users=load("radio_users",[]);
+    const u=users.find(x=>x.id===id);
+    if(!u)return;
+    if(u.role==="operator")u.role="dispatcher";
+    else if(u.role==="dispatcher")u.role="admin";
+    else u.role="operator";
+    save("radio_users",users);
+    renderAdmin();
+}
+function deleteUser(id){
+    let users=load("radio_users",[]);
+    const u=users.find(x=>x.id===id);
+    if(!u)return;
+    if(currentUser && currentUser.id===id){flash("Nu îți poți șterge propriul cont.");return;}
+    if(!confirm("Ștergi contul "+u.username+"?"))return;
+    users=users.filter(x=>x.id!==id);
+    save("radio_users",users);
+    renderAdmin();
+}
+function exportData(){
+    const blob=new Blob([JSON.stringify({users:load("radio_users",[]),messages:getMessages(),exportedAt:now()},null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="sistem_radio_export.json";
+    a.click();
+}
+function resetDemo(){
+    if(!confirm("Resetezi tot sistemul local?"))return;
+    localStorage.removeItem("radio_users");
+    localStorage.removeItem("radio_messages");
+    sessionStorage.removeItem("radio_current_user");
+    currentUser=null;
+    initData();
+    showPage("login");
+}
+document.getElementById("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage();});
+
+initData();
+const sessionId=sessionStorage.getItem("radio_current_user");
+if(sessionId){
+    const users=load("radio_users",[]);
+    const u=users.find(x=>x.id===sessionId && x.active);
+    if(u) currentUser=u;
+}
+refreshNav();
+showPage(currentUser?"radio":"login");
+if(currentUser){sendOnlinePing();broadcast("online_request",{});}
+</script>
+</body>
+</html>
