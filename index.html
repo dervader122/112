@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Radio Operativ - FULL HTML</title>
+<style>
+:root{
+    --bg:#0b0e13;
+    --panel:#151a22;
+    --panel2:#1d2430;
+    --panel3:#10151d;
+    --line:#343d4c;
+    --text:#e9edf5;
+    --muted:#9ea8b8;
+    --green:#7dffb4;
+    --red:#ff6565;
+    --yellow:#ffd36b;
+    --blue:#79aaff;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at top left, rgba(121,170,255,.13), transparent 28%),
+        radial-gradient(circle at top right, rgba(125,255,180,.10), transparent 26%),
+        linear-gradient(135deg,#080a0e,#151a23 55%,#0a0d12);
+    color:var(--text);
+    font-family:"Segoe UI",Arial,sans-serif;
+    min-height:100vh;
+}
+.hidden{display:none!important}
+button,input,select,textarea{font-family:inherit}
+.topbar{
+    height:78px;
+    background:rgba(14,18,25,.96);
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{
+    width:52px;height:52px;
+    display:grid;place-items:center;
+    border-radius:15px;
+    background:#080b10;
+    border:1px solid var(--line);
+    font-size:28px;
+}
+.brand h1{margin:0;font-size:20px;letter-spacing:1px}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.nav button{
+    background:#141a23;
+    border:1px solid var(--line);
+    border-radius:11px;
+    color:var(--text);
+    padding:10px 13px;
+    font-weight:800;
+    cursor:pointer;
+}
+.nav button:hover{background:#2a3445}
+main{padding:24px}
+.card{
+    background:linear-gradient(180deg,var(--panel),#111720);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 28px 70px rgba(0,0,0,.35);
+}
+.auth{
+    max-width:520px;
+    margin:42px auto;
+    padding:28px;
+}
+.auth h2,.panel h2{margin:0 0 8px}
+.muted{color:var(--muted)}
+label{
+    display:block;
+    margin:14px 0 7px;
+    font-weight:800;
+    color:#f0f3f9;
+}
+input,select,textarea{
+    width:100%;
+    background:#0b0f16;
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:13px;
+    outline:none;
+}
+textarea{min-height:88px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#7d879a}
+.primary,.btn{
+    background:#334057;
+    border:1px solid #5b667a;
+    color:white;
+    border-radius:12px;
+    padding:12px 15px;
+    cursor:pointer;
+    font-weight:900;
+}
+.primary{width:100%;margin-top:17px}
+.primary:hover,.btn:hover{background:#43516b}
+.flash{
+    position:fixed;
+    top:92px;right:20px;
+    background:#2d3748;
+    border:1px solid #657188;
+    border-radius:14px;
+    padding:13px 16px;
+    z-index:999;
+    max-width:370px;
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+.radio-layout{
+    display:grid;
+    grid-template-columns:300px 1fr 310px;
+    gap:18px;
+    min-height:calc(100vh - 128px);
+}
+.side,.radio-main,.right{
+    padding:18px;
+    overflow:auto;
+}
+.section-title{
+    margin:3px 0 13px;
+    font-size:14px;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+    color:#f2f5fb;
+}
+.channel{
+    width:100%;
+    border:1px solid var(--line);
+    background:#111821;
+    color:var(--text);
+    border-radius:13px;
+    padding:12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:850;
+    text-align:left;
+}
+.channel:hover{background:#263143}
+.channel.active{background:#344157;border-color:#7d899f}
+.dot{
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
+}
+.operator,.mini{
+    margin-top:15px;
+    background:#0f151e;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+}
+.badge{
+    display:inline-block;
+    margin-top:8px;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#2c3545;
+    border:1px solid #5e6b80;
+    font-size:12px;
+    font-weight:900;
+}
+.radio-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    padding-bottom:15px;
+    gap:12px;
+}
+.radio-head h2{margin:0}
+.radio-head p{margin:5px 0 0;color:var(--muted)}
+.signal{
+    display:flex;
+    align-items:end;
+    gap:5px;
+    color:var(--green);
+    font-size:12px;
+    font-weight:900;
+}
+.signal i{
+    display:block;width:6px;
+    border-radius:5px;
+    background:var(--green);
+}
+.signal i:nth-child(1){height:10px}
+.signal i:nth-child(2){height:16px}
+.signal i:nth-child(3){height:23px}
+.signal i:nth-child(4){height:30px}
+.messages{
+    height:calc(100vh - 308px);
+    min-height:380px;
+    overflow:auto;
+    padding:16px 4px;
+}
+.msg{
+    background:#101722;
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:12px;
+    margin-bottom:10px;
+}
+.msg.code{border-color:#786b3d;background:#211d12}
+.msg.alert{border-color:#8d4141;background:#241315}
+.msg-top{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    color:var(--muted);
+    font-size:13px;
+}
+.msg-top b{color:var(--text);font-size:14px}
+.msg-top em{margin-left:auto;font-style:normal}
+.msg-body{margin-top:7px;line-height:1.48}
+.composer{
+    border-top:1px solid var(--line);
+    padding-top:14px;
+    display:grid;
+    grid-template-columns:165px 1fr 135px;
+    gap:10px;
+}
+.ptt{background:#3b4659}
+.ptt.live{
+    background:#7d2020;
+    border-color:#ff7474;
+    box-shadow:0 0 24px rgba(255,101,101,.35);
+}
+.send{background:#3d4b65}
+.quick button{
+    width:100%;
+    text-align:left;
+    margin:4px 0;
+    padding:9px;
+    background:#141b25;
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    cursor:pointer;
+}
+.quick button:hover{background:#283244}
+.panel{
+    max-width:1180px;
+    margin:0 auto;
+    padding:24px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:18px 0;
+}
+.stat{
+    background:#0f151e;
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:15px;
+}
+.stat b{font-size:27px;display:block}
+.stat span{color:var(--muted);font-size:12px}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:16px;
+}
+th,td{
+    border-bottom:1px solid var(--line);
+    padding:10px;
+    text-align:left;
+    font-size:13px;
+}
+th{background:#101722;color:#f1f4fa}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.smallbtn{
+    padding:8px 10px;
+    font-size:12px;
+    border-radius:9px;
+}
+.danger{background:#5b2528;border-color:#954f55}
+.warn{background:#56461f;border-color:#8c7532}
+.ok{background:#1f5638;border-color:#438b62}
+.history-item{
+    background:#101722;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:13px;
+    margin:9px 0;
+}
+.history-item .top{color:var(--muted);font-size:13px}
+.history-item b{color:var(--text)}
+.history-item em{float:right;font-style:normal}
+.search-row{
+    display:grid;
+    grid-template-columns:1fr 220px 140px;
+    gap:10px;
+    margin:16px 0;
+}
+.row2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+.footer-note{color:var(--muted);font-size:12px;margin-top:10px}
+.userline{font-size:13px;color:var(--muted)}
+@media(max-width:1100px){
+    .radio-layout{grid-template-columns:1fr}
+    .messages{height:430px}
+    .grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+    .topbar{height:auto;flex-direction:column;align-items:flex-start;padding:14px;gap:12px}
+    main{padding:14px}
+    .composer,.search-row,.row2{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">📻</div>
+        <div>
+            <h1>SISTEM RADIO OPERATIV</h1>
+            <p>FULL HTML • conturi locale • canale • PTT • admin • istoric</p>
+        </div>
+    </div>
+    <nav class="nav">
+        <button class="authOnly" onclick="showPage('radio')">Radio</button>
+        <button class="authOnly" onclick="showPage('history')">Istoric</button>
+        <button class="adminOnly" onclick="showPage('admin')">Admin</button>
+        <button class="guestOnly" onclick="showPage('login')">Login</button>
+        <button class="guestOnly" onclick="showPage('register')">Cont nou</button>
+        <button class="authOnly" onclick="logout()">Ieșire</button>
+    </nav>
+</header>
+
+<div id="flash" class="flash hidden"></div>
+
+<main>
+
+<section id="loginPage" class="auth card">
+    <h2>Autentificare</h2>
+    <p class="muted">Intră în sistem cu username și parolă.</p>
+
+    <label>Username</label>
+    <input id="loginUser" placeholder="admin">
+
+    <label>Parolă</label>
+    <input id="loginPass" type="password" placeholder="admin123">
+
+    <button class="primary" onclick="login()">INTRĂ ÎN SISTEM</button>
+    <p class="footer-note">Conturi inițiale: <b>admin/admin123</b>, <b>smurd/smurd123</b>, <b>pompieri/pompieri123</b>, <b>politie/politie123</b></p>
+</section>
+
+<section id="registerPage" class="auth card hidden">
+    <h2>Creare cont radio</h2>
+    <p class="muted">Contul se salvează local în browser, în localStorage.</p>
+
+    <label>Username</label>
+    <input id="regUser" placeholder="ex: vlad">
+
+    <label>Parolă</label>
+    <input id="regPass" type="password" placeholder="minim 4 caractere">
+
+    <label>Indicativ radio</label>
+    <input id="regCallsign" placeholder="ex: SMURD-21">
+
+    <label>Unitate</label>
+    <input id="regUnit" placeholder="ex: SMURD Vaslui">
+
+    <button class="primary" onclick="registerUser()">CREEAZĂ CONT</button>
+</section>
+
+<section id="radioPage" class="hidden">
+    <div class="radio-layout">
+        <aside class="side card">
+            <h3 class="section-title">Canale radio</h3>
+            <div id="channelList"></div>
+
+            <div class="operator">
+                <h3>Operator conectat</h3>
+                <p><b id="opCallsign">---</b></p>
+                <p class="userline" id="opUnit">---</p>
+                <span class="badge" id="opRole">---</span>
+            </div>
+        </aside>
+
+        <section class="radio-main card">
+            <div class="radio-head">
+                <div>
+                    <h2 id="currentChannelTitle">DISPECERAT GENERAL</h2>
+                    <p>Canal operațional activ • transmisie locală</p>
+                </div>
+                <div class="signal">
+                    <i></i><i></i><i></i><i></i> SEMNAL ACTIV
+                </div>
+            </div>
+
+            <div id="messages" class="messages"></div>
+
+            <div class="composer">
+                <button id="pttBtn" class="btn ptt">ȚINE APĂSAT PTT</button>
+                <input id="messageInput" placeholder="Scrie mesaj radio...">
+                <button class="btn send" onclick="sendMessage()">TRANSMITE</button>
+            </div>
+            <p class="footer-note">ENTER = transmite • PTT = simulează stația radio • toate mesajele sunt salvate local.</p>
+        </section>
+
+        <aside class="right card">
+            <h3 class="section-title">Coduri rapide</h3>
+            <div class="quick">
+                <button onclick="quickCode('Cod 0 - Test radio / recepție')">Cod 0 - Test radio</button>
+                <button onclick="quickCode('Cod 1 - Disponibil')">Cod 1 - Disponibil</button>
+                <button onclick="quickCode('Cod 2 - În deplasare')">Cod 2 - În deplasare</button>
+                <button onclick="quickCode('Cod 3 - Ajuns la fața locului')">Cod 3 - Ajuns la caz</button>
+                <button onclick="quickCode('Cod 4 - Intervenție finalizată')">Cod 4 - Finalizat</button>
+                <button onclick="quickCode('Cod 5 - Solicit sprijin')">Cod 5 - Sprijin</button>
+                <button onclick="quickCode('Cod ROȘU - Urgență majoră')">Cod ROȘU</button>
+                <button onclick="quickCode('Cod GALBEN - Urgență medie')">Cod GALBEN</button>
+                <button onclick="quickCode('Cod VERDE - Situație stabilă')">Cod VERDE</button>
+            </div>
+
+            <div class="mini">
+                <h3>Info sistem</h3>
+                <p class="userline">Datele sunt locale. Nu trimite parole reale.</p>
+                <button class="btn smallbtn warn" onclick="exportData()">Export date JSON</button>
+                <button class="btn smallbtn danger" onclick="resetDemo()">Reset sistem</button>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section id="historyPage" class="panel card hidden">
+    <h2>Istoric comunicații</h2>
+    <p class="muted">Caută în mesajele salvate local.</p>
+
+    <div class="search-row">
+        <input id="historySearch" placeholder="Caută după mesaj, indicativ, canal...">
+        <select id="historyChannel"></select>
+        <button class="btn" onclick="renderHistory()">Caută</button>
+    </div>
+
+    <div id="historyList"></div>
+</section>
+
+<section id="adminPage" class="panel card hidden">
+    <h2>Panou administrator</h2>
+    <p class="muted">Gestionează toate conturile locale din sistem.</p>
+
+    <div class="grid">
+        <div class="stat"><b id="statUsers">0</b><span>conturi totale</span></div>
+        <div class="stat"><b id="statActive">0</b><span>conturi active</span></div>
+        <div class="stat"><b id="statAdmins">0</b><span>administratori</span></div>
+        <div class="stat"><b id="statMessages">0</b><span>mesaje radio</span></div>
+    </div>
+
+    <h3>Adaugă cont manual</h3>
+    <div class="row2">
+        <input id="adminNewUser" placeholder="username">
+        <input id="adminNewPass" placeholder="parolă">
+        <input id="adminNewCallsign" placeholder="indicativ">
+        <input id="adminNewUnit" placeholder="unitate">
+    </div>
+    <div class="row2" style="margin-top:10px">
+        <select id="adminNewRole">
+            <option value="operator">operator</option>
+            <option value="admin">admin</option>
+            <option value="dispatcher">dispatcher</option>
+        </select>
+        <button class="btn ok" onclick="adminCreateUser()">Adaugă cont</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Indicativ</th>
+                <th>Unitate</th>
+                <th>Rol</th>
+                <th>Activ</th>
+                <th>Creat la</th>
+                <th>Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody id="usersTable"></tbody>
+    </table>
+</section>
+
+</main>
+
+<script>
+const CHANNELS = [
+    "DISPECERAT GENERAL",
+    "SMURD",
+    "POMPIERI",
+    "POLIȚIE",
+    "AMBULANȚĂ",
+    "INTERVENȚII SPECIALE",
+    "LOGISTICĂ",
+    "TEST RADIO"
+];
+
+let currentUser = null;
+let currentChannel = "DISPECERAT GENERAL";
+let pttActive = false;
+
+function now(){
+    const d = new Date();
+    return d.toLocaleString("ro-RO");
+}
+
+function uid(){
+    return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+
+function load(key, fallback){
+    try{
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    }catch(e){
+        return fallback;
+    }
+}
+
+function save(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function initData(){
+    let users = load("radio_users", null);
+    if(!users){
+        users = [
+            {id:uid(), username:"admin", password:"admin123", callsign:"DISPECERAT-01", unit:"Centru Operativ", role:"admin", active:true, createdAt:now()},
+            {id:uid(), username:"smurd", password:"smurd123", callsign:"SMURD-21", unit:"SMURD", role:"operator", active:true, createdAt:now()},
+            {id:uid(), username:"pompieri", password:"pompieri123", callsign:"POMPIERI-11", unit:"Detașament Pompieri", role:"operator", active:true, createdAt:now()},
+            {id:uid(), username:"politie", password:"politie123", callsign:"POLIȚIE-05", unit:"Poliție", role:"dispatcher", active:true, createdAt:now()}
+        ];
+        save("radio_users", users);
+    }
+
+    let messages = load("radio_messages", null);
+    if(!messages){
+        messages = [
+            {id:uid(), channel:"DISPECERAT GENERAL", callsign:"DISPECERAT-01", unit:"Centru Operativ", role:"admin", type:"text", text:"Sistem radio pornit și operațional.", createdAt:now()},
+            {id:uid(), channel:"SMURD", callsign:"SMURD-21", unit:"SMURD", role:"operator", type:"code", text:"Cod 0 - Test radio / recepție", createdAt:now()}
+        ];
+        save("radio_messages", messages);
+    }
+}
+
+function flash(text){
+    const f = document.getElementById("flash");
+    f.innerText = text;
+    f.classList.remove("hidden");
+    setTimeout(()=>f.classList.add("hidden"), 2600);
+}
+
+function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+}
+
+function refreshNav(){
+    document.querySelectorAll(".authOnly").forEach(x=>x.classList.toggle("hidden", !currentUser));
+    document.querySelectorAll(".guestOnly").forEach(x=>x.classList.toggle("hidden", !!currentUser));
+    document.querySelectorAll(".adminOnly").forEach(x=>x.classList.toggle("hidden", !(currentUser && currentUser.role==="admin")));
+}
+
+function showPage(page){
+    ["loginPage","registerPage","radioPage","historyPage","adminPage"].forEach(id=>{
+        document.getElementById(id).classList.add("hidden");
+    });
+
+    if(page==="login") document.getElementById("loginPage").classList.remove("hidden");
+    if(page==="register") document.getElementById("registerPage").classList.remove("hidden");
+
+    if(page==="radio"){
+        if(!currentUser){showPage("login");return;}
+        document.getElementById("radioPage").classList.remove("hidden");
+        renderChannels();
+        renderOperator();
+        renderMessages();
+    }
+
+    if(page==="history"){
+        if(!currentUser){showPage("login");return;}
+        document.getElementById("historyPage").classList.remove("hidden");
+        renderHistoryControls();
+        renderHistory();
+    }
+
+    if(page==="admin"){
+        if(!currentUser){showPage("login");return;}
+        if(currentUser.role!=="admin"){flash("Acces doar pentru administrator.");showPage("radio");return;}
+        document.getElementById("adminPage").classList.remove("hidden");
+        renderAdmin();
+    }
+    refreshNav();
+}
+
+function login(){
+    const username = document.getElementById("loginUser").value.trim();
+    const password = document.getElementById("loginPass").value.trim();
+    const users = load("radio_users", []);
+
+    const u = users.find(x=>x.username.toLowerCase()===username.toLowerCase() && x.password===password);
+
+    if(!u){flash("Username sau parolă greșită.");return;}
+    if(!u.active){flash("Cont dezactivat de administrator.");return;}
+
+    currentUser = u;
+    sessionStorage.setItem("radio_current_user", u.id);
+    flash("Autentificat: " + u.callsign);
+    showPage("radio");
+}
+
+function logout(){
+    currentUser = null;
+    sessionStorage.removeItem("radio_current_user");
+    flash("Ai ieșit din sistem.");
+    showPage("login");
+}
+
+function registerUser(){
+    const username = document.getElementById("regUser").value.trim();
+    const password = document.getElementById("regPass").value.trim();
+    const callsign = document.getElementById("regCallsign").value.trim().toUpperCase();
+    const unit = document.getElementById("regUnit").value.trim();
+
+    if(username.length<3 || password.length<4 || callsign.length<2){
+        flash("Date incomplete. Username min. 3, parolă min. 4, indicativ min. 2.");
+        return;
+    }
+
+    const users = load("radio_users", []);
+    if(users.some(x=>x.username.toLowerCase()===username.toLowerCase())){
+        flash("Username deja existent.");
+        return;
+    }
+
+    users.push({
+        id:uid(),
+        username,
+        password,
+        callsign,
+        unit:unit || "Nespecificat",
+        role:"operator",
+        active:true,
+        createdAt:now()
+    });
+
+    save("radio_users", users);
+    flash("Cont creat. Te poți autentifica.");
+    showPage("login");
+}
+
+function renderChannels(){
+    const list = document.getElementById("channelList");
+    list.innerHTML = "";
+    CHANNELS.forEach(ch=>{
+        const b = document.createElement("button");
+        b.className = "channel" + (ch===currentChannel ? " active" : "");
+        b.innerHTML = `<span class="dot"></span>${escapeHtml(ch)}`;
+        b.onclick = ()=>{
+            currentChannel = ch;
+            document.getElementById("currentChannelTitle").innerText = ch;
+            renderChannels();
+            renderMessages();
+        };
+        list.appendChild(b);
+    });
+    document.getElementById("currentChannelTitle").innerText = currentChannel;
+}
+
+function renderOperator(){
+    if(!currentUser) return;
+    document.getElementById("opCallsign").innerText = currentUser.callsign;
+    document.getElementById("opUnit").innerText = currentUser.unit;
+    document.getElementById("opRole").innerText = currentUser.role.toUpperCase();
+}
+
+function getMessages(){
+    return load("radio_messages", []);
+}
+
+function saveMessages(messages){
+    save("radio_messages", messages);
+}
+
+function renderMessages(){
+    const box = document.getElementById("messages");
+    const messages = getMessages().filter(m=>m.channel===currentChannel);
+    box.innerHTML = "";
+
+    if(messages.length===0){
+        box.innerHTML = `<p class="muted">Nu există mesaje pe acest canal.</p>`;
+        return;
+    }
+
+    messages.forEach(m=>{
+        const div = document.createElement("div");
+        div.className = "msg " + (m.type || "text");
+        div.innerHTML = `
+            <div class="msg-top">
+                <b>${escapeHtml(m.callsign)}</b>
+                <span>${escapeHtml(m.unit || "")}</span>
+                <em>${escapeHtml(m.createdAt)}</em>
+            </div>
+            <div class="msg-body">${escapeHtml(m.text)}</div>
+        `;
+        box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+}
+
+function sendMessage(type="text", customText=null){
+    if(!currentUser) return;
+
+    const input = document.getElementById("messageInput");
+    const text = (customText ?? input.value).trim();
+    if(!text) return;
+
+    const messages = getMessages();
+    messages.push({
+        id:uid(),
+        channel:currentChannel,
+        callsign:currentUser.callsign,
+        unit:currentUser.unit,
+        role:currentUser.role,
+        type,
+        text:(pttActive ? "[PTT ACTIV] " : "") + text,
+        createdAt:now()
+    });
+    saveMessages(messages);
+    input.value = "";
+    renderMessages();
+}
+
+function quickCode(text){
+    sendMessage("code", text);
+}
+
+function renderHistoryControls(){
+    const sel = document.getElementById("historyChannel");
+    sel.innerHTML = `<option value="TOATE">TOATE CANALELE</option>`;
+    CHANNELS.forEach(ch=>{
+        sel.innerHTML += `<option value="${escapeHtml(ch)}">${escapeHtml(ch)}</option>`;
+    });
+}
+
+function renderHistory(){
+    const q = document.getElementById("historySearch").value.trim().toLowerCase();
+    const ch = document.getElementById("historyChannel").value;
+    let messages = getMessages().slice().reverse();
+
+    if(ch && ch!=="TOATE") messages = messages.filter(m=>m.channel===ch);
+    if(q){
+        messages = messages.filter(m =>
+            m.text.toLowerCase().includes(q) ||
+            m.callsign.toLowerCase().includes(q) ||
+            m.channel.toLowerCase().includes(q) ||
+            (m.unit || "").toLowerCase().includes(q)
+        );
+    }
+
+    const list = document.getElementById("historyList");
+    list.innerHTML = "";
+
+    if(messages.length===0){
+        list.innerHTML = `<p class="muted">Nu există rezultate.</p>`;
+        return;
+    }
+
+    messages.forEach(m=>{
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+            <div class="top">
+                <b>${escapeHtml(m.callsign)}</b> • ${escapeHtml(m.channel)} • ${escapeHtml(m.unit || "")}
+                <em>${escapeHtml(m.createdAt)}</em>
+            </div>
+            <p>${escapeHtml(m.text)}</p>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function renderAdmin(){
+    const users = load("radio_users", []);
+    const messages = getMessages();
+
+    document.getElementById("statUsers").innerText = users.length;
+    document.getElementById("statActive").innerText = users.filter(u=>u.active).length;
+    document.getElementById("statAdmins").innerText = users.filter(u=>u.role==="admin").length;
+    document.getElementById("statMessages").innerText = messages.length;
+
+    const tbody = document.getElementById("usersTable");
+    tbody.innerHTML = "";
+
+    users.forEach(u=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${escapeHtml(u.id.slice(0,8))}</td>
+            <td><b>${escapeHtml(u.username)}</b></td>
+            <td>${escapeHtml(u.callsign)}</td>
+            <td>${escapeHtml(u.unit)}</td>
+            <td>${escapeHtml(u.role)}</td>
+            <td>${u.active ? "DA" : "NU"}</td>
+            <td>${escapeHtml(u.createdAt)}</td>
+            <td>
+                <div class="actions">
+                    <button class="btn smallbtn ${u.active ? "danger" : "ok"}" onclick="toggleUser('${u.id}')">${u.active ? "Dezactivează" : "Activează"}</button>
+                    <button class="btn smallbtn warn" onclick="toggleRole('${u.id}')">Schimbă rol</button>
+                    <button class="btn smallbtn danger" onclick="deleteUser('${u.id}')">Șterge</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function adminCreateUser(){
+    const username = document.getElementById("adminNewUser").value.trim();
+    const password = document.getElementById("adminNewPass").value.trim();
+    const callsign = document.getElementById("adminNewCallsign").value.trim().toUpperCase();
+    const unit = document.getElementById("adminNewUnit").value.trim();
+    const role = document.getElementById("adminNewRole").value;
+
+    if(username.length<3 || password.length<4 || callsign.length<2){
+        flash("Completează datele contului.");
+        return;
+    }
+
+    const users = load("radio_users", []);
+    if(users.some(u=>u.username.toLowerCase()===username.toLowerCase())){
+        flash("Username deja existent.");
+        return;
+    }
+
+    users.push({
+        id:uid(),
+        username,
+        password,
+        callsign,
+        unit:unit || "Nespecificat",
+        role,
+        active:true,
+        createdAt:now()
+    });
+    save("radio_users", users);
+
+    ["adminNewUser","adminNewPass","adminNewCallsign","adminNewUnit"].forEach(id=>document.getElementById(id).value="");
+    flash("Cont adăugat.");
+    renderAdmin();
+}
+
+function toggleUser(id){
+    let users = load("radio_users", []);
+    const u = users.find(x=>x.id===id);
+    if(!u) return;
+    if(currentUser && currentUser.id===id){
+        flash("Nu îți poți dezactiva propriul cont.");
+        return;
+    }
+    u.active = !u.active;
+    save("radio_users", users);
+    flash("Status cont modificat.");
+    renderAdmin();
+}
+
+function toggleRole(id){
+    let users = load("radio_users", []);
+    const u = users.find(x=>x.id===id);
+    if(!u) return;
+    if(u.role==="operator") u.role="dispatcher";
+    else if(u.role==="dispatcher") u.role="admin";
+    else u.role="operator";
+    save("radio_users", users);
+    flash("Rol modificat.");
+    renderAdmin();
+}
+
+function deleteUser(id){
+    let users = load("radio_users", []);
+    const u = users.find(x=>x.id===id);
+    if(!u) return;
+    if(currentUser && currentUser.id===id){
+        flash("Nu îți poți șterge propriul cont.");
+        return;
+    }
+    if(!confirm("Sigur ștergi contul " + u.username + "?")) return;
+    users = users.filter(x=>x.id!==id);
+    save("radio_users", users);
+    flash("Cont șters.");
+    renderAdmin();
+}
+
+function exportData(){
+    const data = {
+        users: load("radio_users", []),
+        messages: getMessages(),
+        exportedAt: now()
+    };
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "sistem_radio_export.json";
+    a.click();
+}
+
+function resetDemo(){
+    if(!confirm("Sigur resetezi sistemul? Se șterg conturile și mesajele locale.")) return;
+    localStorage.removeItem("radio_users");
+    localStorage.removeItem("radio_messages");
+    sessionStorage.removeItem("radio_current_user");
+    currentUser = null;
+    initData();
+    flash("Sistem resetat.");
+    showPage("login");
+}
+
+document.getElementById("messageInput").addEventListener("keydown", e=>{
+    if(e.key==="Enter") sendMessage();
+});
+
+const ptt = document.getElementById("pttBtn");
+ptt.addEventListener("mousedown", ()=>{
+    pttActive=true;
+    ptt.classList.add("live");
+    ptt.innerText="TRANSMIȚI...";
+});
+ptt.addEventListener("mouseup", ()=>{
+    pttActive=false;
+    ptt.classList.remove("live");
+    ptt.innerText="ȚINE APĂSAT PTT";
+});
+ptt.addEventListener("mouseleave", ()=>{
+    pttActive=false;
+    ptt.classList.remove("live");
+    ptt.innerText="ȚINE APĂSAT PTT";
+});
+
+initData();
+
+const sessionId = sessionStorage.getItem("radio_current_user");
+if(sessionId){
+    const users = load("radio_users", []);
+    const u = users.find(x=>x.id===sessionId && x.active);
+    if(u) currentUser = u;
+}
+
+refreshNav();
+showPage(currentUser ? "radio" : "login");
+</script>
+</body>
+</html>
