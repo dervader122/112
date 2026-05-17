@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card">
+    <h2>Autentificare</h2>
+    <p class="muted">Intră în sistemul radio cu username și parolă.</p>
+    <form method="post">
+        <label>Username</label>
+        <input name="username" placeholder="ex: vlad">
+
+        <label>Parolă</label>
+        <input name="password" type="password" placeholder="parola">
+
+        <button class="primary">Intră în sistem</button>
+    </form>
+    <p class="small">Admin inițial: <b>admin</b> / <b>admin123</b></p>
+</div>
+{% endblock %}
